@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/favorite"
+        android:icon="@mipmap/usershezhi"
+        android:title="    信息设置" />
+    <item
+        android:id="@+id/wallet"
+        android:icon="@mipmap/msg"
+        android:title="    通知" />
+    <item
+        android:id="@+id/file"
+        android:icon="@mipmap/logout"
+        android:title="    退出账号" />
+
+
+</menu>

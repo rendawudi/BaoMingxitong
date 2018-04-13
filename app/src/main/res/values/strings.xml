@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">工训中心创新项目管理</string>
+    <string name="yiyourenshu">已申报人数：</string>
+    <string name="zongrenshu">项目人数限制：</string>
+    <string name="zhidaolaoshi">指导老师：</string>
+</resources>
