@@ -1,13 +1,17 @@
 package com.example.rd.baomingxitong.views
 
+import android.app.Fragment
 import android.app.FragmentTransaction
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.View
+import android.widget.FrameLayout
+import com.example.rd.baomingxitong.FileAndShipinView.LessonActivity
 import com.example.rd.baomingxitong.R
 import com.example.rd.baomingxitong.databinding.ActivityZhujiemianBinding
+import com.example.rd.baomingxitong.entity.FileAndShipin.Lesson
 import com.example.rd.baomingxitong.fuzhu.SocketClient
 import kotlinx.android.synthetic.main.activity_zhujiemian.*
 
@@ -16,6 +20,8 @@ class zhujiemian : FragmentActivity() {
     var taskJoined: TaskJoinedActivity ?=null
     var taskList: TaskListActivity ?=null
     var zidingyi: TaskActivity?=null
+
+
     lateinit var binding: ActivityZhujiemianBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +29,10 @@ class zhujiemian : FragmentActivity() {
         binding.zhujiemian = this
         liaotian(null)
         shezhiMenu(binding)
+        var lesson:FrameLayout?=findViewById(R.id.layout5)
+        lesson?.setOnClickListener(){
+            this.startActivity(Intent(this,LessonActivity::class.java))
+        }
     }
 
     override fun onResume() {

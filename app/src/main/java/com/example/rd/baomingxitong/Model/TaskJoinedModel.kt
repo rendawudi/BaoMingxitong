@@ -42,6 +42,8 @@ object TaskJoinedModel
                 {
                     var xiangmu = GreenDaoUse.mDaoSession.queryBuilder(LTXiangmu::class.java).where(LTXiangmuDao.Properties.XiangmuId.eq(i.xiangmuId.toLong()),LTXiangmuDao.Properties.PiciId.eq(i.piciId.toLong()),LTXiangmuDao.Properties.Duizhangxuehao.eq(i.duizhangxuehao)).unique()
                     GreenDaoUse.mTaskLT.delete(xiangmu)
+                    var xiangmu1 = GreenDaoUse.mDaoSession.queryBuilder(LTXiangmu::class.java).where(LTXiangmuDao.Properties.XiangmuId.eq(i.xiangmuId.toLong()),LTXiangmuDao.Properties.PiciId.eq(i.piciId.toLong()),LTXiangmuDao.Properties.Duizhangxuehao.eq("-1")).unique()
+                    GreenDaoUse.mTaskLT.delete(xiangmu1)
                 }
             }
 
@@ -56,14 +58,16 @@ object TaskJoinedModel
                 xiangmu.duizhangxuehao = taskHttp.duizhangxuehao
                 xiangmu.piciId = taskHttp.piciId.toLong()
                 try {
-                    if (GreenDaoUse.mDaoSession.queryBuilder(LTXiangmu::class.java).where(LTXiangmuDao.Properties.XiangmuId.eq(xiangmu.xiangmuId.toLong()),LTXiangmuDao.Properties.PiciId.eq(xiangmu.piciId.toLong()),LTXiangmuDao.Properties.Duizhangxuehao.eq(xiangmu.duizhangxuehao)).count()== ( 0.toLong()))
+                    if (GreenDaoUse.mDaoSession.queryBuilder(LTXiangmu::class.java).where(LTXiangmuDao.Properties.XiangmuId.eq(xiangmu.xiangmuId.toLong()),LTXiangmuDao.Properties.PiciId.eq(xiangmu.piciId.toLong()),LTXiangmuDao.Properties.Duizhangxuehao.eq(xiangmu.duizhangxuehao)).count()== (0 as Long))
+                        GreenDaoUse.mTaskLT.insertOrReplace(xiangmu)
+                    xiangmu.duizhangxuehao = "-1"
+                    if (GreenDaoUse.mDaoSession.queryBuilder(LTXiangmu::class.java).where(LTXiangmuDao.Properties.XiangmuId.eq(xiangmu.xiangmuId.toLong()),LTXiangmuDao.Properties.PiciId.eq(xiangmu.piciId.toLong()),LTXiangmuDao.Properties.Duizhangxuehao.eq("-1")).count()== (0 as Long))
                         GreenDaoUse.mTaskLT.insertOrReplace(xiangmu)
                 }
                 catch (e: Exception)
                 {
-                    e.printStackTrace()
-                }
 
+                }
             }
             if (taskJoinedList.LTMsgs!=null)
             for (taskMsg in taskJoinedList!!.LTMsgs)

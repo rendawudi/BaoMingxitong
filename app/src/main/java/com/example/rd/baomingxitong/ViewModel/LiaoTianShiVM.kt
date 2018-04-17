@@ -35,7 +35,6 @@ object LiaoTianShiVM
     var xiangmuId: Long = 0
     var piciId: Long = 0
     var duizhangxuehao: String = ""
-    var xmid : Long = 0
 
     fun init(binding: ActivityLiaotianShiBinding,activity: LiaotianShi)
     {
@@ -49,7 +48,6 @@ object LiaoTianShiVM
         GreenDaoUse.mDaoSession.clear()
         var xiangmus = GreenDaoUse.mDaoSession.queryBuilder(LTXiangmu::class.java).where(LTXiangmuDao.Properties.XiangmuId.eq(xiangmuId), LTXiangmuDao.Properties.PiciId.eq(piciId), LTXiangmuDao.Properties.Duizhangxuehao.eq(duizhangxuehao)).unique()
         liaotianMsgs = ArrayList<LTSxiaoxi>()
-        xmid = xiangmus.xmid
         if (xiangmus!=null&&xiangmus.msgList!=null)
         {
             for (i in xiangmus.msgList)
@@ -104,7 +102,6 @@ object LiaoTianShiVM
         msg.msg = shuru.get()
         msg.duizhangxuehao = duizhangxuehao
         msg.piciId = piciId
-        msg.xmid = xmid
 
         if (!MyApp.instances.sftecher)
         msg.xingming = MyApp.instances.user!!.xingming
@@ -120,6 +117,7 @@ object LiaoTianShiVM
     fun setMsg(i: LTMsg)
     {
         try {
+            i.xmid = GreenDaoUse.mDaoSession.queryBuilder(LTXiangmu::class.java).where(LTXiangmuDao.Properties.XiangmuId.eq(i.xiangmuId.toLong()),LTXiangmuDao.Properties.PiciId.eq(i.piciId.toLong()),LTXiangmuDao.Properties.Duizhangxuehao.eq(i.duizhangxuehao)).unique().xmid
             GreenDaoUse.mMsgLt.insertInTx(i)
         }
        catch (e: Exception)

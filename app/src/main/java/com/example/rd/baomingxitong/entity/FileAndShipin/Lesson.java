@@ -1,6 +1,8 @@
 package com.example.rd.baomingxitong.entity.FileAndShipin;
 
-public class Lesson
+import java.io.Serializable;
+
+public class Lesson implements Serializable
 {
     private String course;  //课程名字
     private String jianjie; //简介

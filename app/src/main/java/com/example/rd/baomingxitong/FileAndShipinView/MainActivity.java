@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,9 +28,11 @@ import com.example.rd.baomingxitong.views.TaskActivity;
 import com.example.rd.baomingxitong.views.TaskXsActivity;
 import com.example.rd.baomingxitong.zidingyiView.MyFragmentAdapter;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.leon.lfilepickerlibrary.LFilePicker;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +47,7 @@ import okhttp3.RequestBody;
 
 public class MainActivity extends BaseActivity {
     private SwipeRefreshLayout swipeRefresh;
+    private FloatingActionButton fab;
     private RadioButton first,second,thirst,joinButton;
     private ViewPager viewPager;
     private List<Fragment> list=new ArrayList<Fragment>();
@@ -51,12 +55,12 @@ public class MainActivity extends BaseActivity {
     private MainActivity activity;
     private final int[] array={R.id.tab1_button,R.id.tab2_button,R.id.tab3_button};
     private final int REQUESTCODE_FROM_ACTIVITY = 1000;  //选择文件后的请求id
-    private myService.UploadBinder uploadBinder;
+    private UploadBinder uploadBinder;
     //后台上传服务
     private ServiceConnection connection=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            uploadBinder=(myService.UploadBinder) service;
+            uploadBinder=(UploadBinder) service;
             if(service!=null)
                 System.out.print("error");
             if(service==null)
@@ -78,6 +82,7 @@ public class MainActivity extends BaseActivity {
         first=(RadioButton) findViewById(R.id.tab1_button);
         second=(RadioButton) findViewById(R.id.tab2_button);
         thirst=(RadioButton) findViewById(R.id.tab3_button);
+        fab=(FloatingActionButton) findViewById(R.id.fab_add);
         joinButton = (RadioButton) findViewById(R.id.jiaruxiangmu);
        swipeRefresh=(SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         first.setChecked(true);
@@ -156,8 +161,8 @@ public class MainActivity extends BaseActivity {
     //悬浮按钮
     public void onClickFab(View v){
         if(second.isChecked()){
-            String directory=
-                   Environment.getRootDirectory().getPath();
+            String directory= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+         //   String directory= Environment.getRootDirectory().getPath();
            // Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
             new LFilePicker()
                     .withActivity(this)
@@ -200,8 +205,15 @@ public class MainActivity extends BaseActivity {
                 params.addFormDataPart("xiangmuId",wendang.getXiangmuId());
                 params.addHeader("Cookie", MyApp.instances.getSharedPreferences("cookies_prefs", MyApp.instances.getContext().MODE_PRIVATE).getString("bmcookies", ""));
                 //       params.addHeader("token", token);//添加header信息
+                upload_success callback=new upload_success() {
+                    @Override
+                    public void success() {
+                        requestdata();
+                    }
+                };
                 if(!files.isEmpty()&&uploadBinder!=null)
-                    uploadBinder.startUpload(params);
+
+                    uploadBinder.startUpload(params,callback);
             }
         }
     }
@@ -234,6 +246,7 @@ public class MainActivity extends BaseActivity {
                 switch (array[position]){
                     case R.id.tab1_button:
                         first.setChecked(true);
+
                         break;
                     case R.id.tab2_button:
                         second.setChecked(true);
@@ -256,9 +269,11 @@ public class MainActivity extends BaseActivity {
                 switch (i){
                     case R.id.tab1_button:
                         viewPager.setCurrentItem(0);
+
                         break;
                     case R.id.tab2_button:
                         viewPager.setCurrentItem(1);
+
                         break;
                 }
             }
@@ -288,12 +303,14 @@ public class MainActivity extends BaseActivity {
                 super.onResponse(response, headers);
                 System.out.println("response=="+response);
                 Gson gson1=new Gson();
-                final HttpResult<List<Wendang>> result=gson1.fromJson(response,HttpResult.class);
+                Type listype=new TypeToken<HttpResult<List<Wendang>>>(){}.getType();
+                final HttpResult<List<Wendang>> result=gson1.fromJson(response,listype);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         swipeRefresh.setRefreshing(false);
                         if(result.getCode()==200&&result.getMsg().equals("success")){
+                            swipeRefresh.setEnabled(false);
                             init(result.getData());
                         }
                     }
@@ -315,7 +332,8 @@ public class MainActivity extends BaseActivity {
                 });
             }
         };
-    HttpUtil.getFile(params,callback);
+    //HttpUtil.getFile(params,callback);
+    HttpUtil.Get(HttpUtil.type_document,params,callback);
     }
 
     @Override

@@ -4,9 +4,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
    >
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/flag1_srcoll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

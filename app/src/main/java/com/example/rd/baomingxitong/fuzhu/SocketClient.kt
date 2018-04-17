@@ -32,7 +32,7 @@ import java.net.URISyntaxException
 object SocketClient
 {
     var Client: WebSocketClient ?=null
-    var address = "ws://10.0.2.2:8080/ws" // ws://111.230.17.38/baomingxitong/ws   ws://10.0.2.2:8080/ws
+    var address = "ws://192.168.1.231:8080/ws" // ws://111.230.17.38/baomingxitong/ws   ws://10.0.2.2:8080/ws
     private val handler = object : Handler() {
         override fun handleMessage(msg: Message) {
             if (msg.what == 0x111) {

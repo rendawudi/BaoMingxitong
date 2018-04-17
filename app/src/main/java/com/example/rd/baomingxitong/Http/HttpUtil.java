@@ -20,18 +20,71 @@ import okhttp3.Response;
 
 
 public class HttpUtil {
+    private final static String myIp="192.168.1.231:8080";
+    public final static int type_document=1;
+    public final static int type_lesson=2;
+    public final static int type_shiping=3;
+    public static void  Delet(int i,RequestParams params, BaseHttpRequestCallback callback){
+        String url=null;
+        switch (i){
+            case 1:
+                url="http://"+myIp+"/FileAndController/dlwendang";
+                break;
+            case 2:
+                url="http://"+myIp+"/FileAndController/deleteLesson";
+                break;
+            case 3:
+                url="http://"+myIp+"/FileAndController/dlshipin";
+        }
+        if(url!=null)
+        HttpRequest.post(url,params,callback);
+    }
+    public static void Get(int i,RequestParams params, BaseHttpRequestCallback callback){
+        String url=null;
+        switch (i){
+            case 1:
+                url="http://"+myIp+"/FileAndController/wendang";
+                break;
+            case 2:
+                url="http://"+myIp+"/FileAndController/lesson";
 
-   public static void deletFile(RequestParams params, BaseHttpRequestCallback<String> callback)
+                break;
+            case 3:
+                url="http://"+myIp+"/FileAndController/shipin";
+
+        }
+        if(url!=null)
+        HttpRequest.post(url,params,callback);
+    }
+
+
+    public static void Upload(int i,RequestParams params, BaseHttpRequestCallback callback){
+        String url=null;
+        switch (i){
+            case 1:
+                url="http://"+myIp+"/FileAndController/scwendang";
+                break;
+            case 2:
+                url="http://"+myIp+"/FileAndController/insertLesson";
+                break;
+            case 3:
+                url="http://"+myIp+"/FileAndController/scshipin";
+        }
+        if(url!=null)
+        HttpRequest.post(url, params, callback);
+    }
+
+   public static void deletFile(RequestParams params, BaseHttpRequestCallback callback)
    {
-      String Url="http://10.0.2.2:8080/FileAndController/wendang";
+      String Url="http://"+myIp+"/FileAndController/wendang";
               //"http://111.230.17.38/baomingxitong/FileAndController/wendang";
-      HttpRequest.delete(Url,params,callback);
+      HttpRequest.post(Url,params,callback);
    }
 
     public static void getFile(RequestParams params, BaseHttpRequestCallback<HttpResult<List<Wendang>>> callback){
         String Url=
                 //"http://192.168.1.116:8080/FileAndController/wendang";
-                "http://10.0.2.2:8080/FileAndController/wendang";   //http://10.0.2.2:8080/FileAndController/wendang/   http://111.230.17.38/baomingxitong/
+                "http://"+myIp+"/FileAndController/wendang";   //http://10.0.2.2:8080/FileAndController/wendang/   http://111.230.17.38/baomingxitong/
 
       //  RequestBody body=params.getRequestBody();
         HttpRequest.post(Url,params,callback);
@@ -39,7 +92,7 @@ public class HttpUtil {
    public static void uploadFile(RequestParams params, BaseHttpRequestCallback callback) {
 
         String fileuploadUri = //"http://192.168.1.116:8080/FileAndController/wendang";
-                "http://10.0.2.2:8080/FileAndController/scwendang";
+                "http://"+myIp+"/FileAndController/scwendang";
 
         //上传的服务器地址，请求部分，返回response数据,
         HttpRequest.post(fileuploadUri, params, callback);

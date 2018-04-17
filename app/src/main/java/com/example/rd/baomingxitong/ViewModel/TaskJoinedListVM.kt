@@ -82,8 +82,6 @@ object TaskJoinedListVM
                     }
                     holder.itemView.openjj.setOnClickListener {
                         TaskViewModelXS.xiangmuId = xiangMus[position].xiangmuId.toInt()
-                        TaskViewModelXS.piciId = xiangMus[position].piciId.toInt();
-                        TaskViewModelXS.duizhangxuehao = xiangMus[position].duizhangxuehao
                         mActivity.startActivity(Intent(mActivity.activity, TaskActivity1::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                     }
                     holder.itemView.setOnLongClickListener {

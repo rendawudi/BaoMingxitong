@@ -185,6 +185,29 @@
                                 android:textSize="16sp" />
                         </FrameLayout>
 
+                        <FrameLayout
+                            android:id="@+id/layout5"
+                            android:layout_width="fill_parent"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:background="#0ff" >
+
+                            <ImageView
+                                android:id="@+id/image5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="top|center"
+                                android:layout_marginTop="12dip"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|center"
+                                android:layout_marginBottom="6dip"
+                                android:text="视屏"
+                                android:textSize="16sp" />
+                        </FrameLayout>
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>

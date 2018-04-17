@@ -8,11 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.example.rd.baomingxitong.Http.HttpUtil;
 import com.example.rd.baomingxitong.R;
@@ -34,7 +38,7 @@ import cn.finalteam.okhttpfinal.FileDownloadCallback;
 public class tab2_fragment extends Fragment implements AdapterView.OnItemClickListener {
     private String[] data={"1","2","3","4","5","2","3","4","5","2","3","4","5"};
     private List<Wendang> mWendang;
-
+    private NestedScrollView nestedScrollView;
     private MyListview listView;
     private MyListAdapter adapter;
     public tab2_fragment() {
@@ -46,12 +50,27 @@ public class tab2_fragment extends Fragment implements AdapterView.OnItemClickLi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment2,container,false);
         listView=(MyListview) view.findViewById(R.id.document);
+        nestedScrollView=(NestedScrollView) view.findViewById(R.id.frag2_scroll) ;
         adapter=new MyListAdapter(getActivity(),R.layout.item_fragment2,mWendang);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showPopMenu(view,i);
+                return true;
+            }
+        });
         return view;
     }
+
+    /**
+     * Called when the Fragment is no longer resumed.  This is generally
+     * tied to {@link Activity#onPause() Activity.onPause} of the containing
+     * Activity's lifecycle.
+     */
+
 
     @Override
     public void onItemClick(final AdapterView<?> adapterView, final View view, final int i, long l) {
@@ -62,7 +81,7 @@ public class tab2_fragment extends Fragment implements AdapterView.OnItemClickLi
             ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
 
-
+//这里是测试url，正式发布需要更改为正确的
         //    String url=mWendang.get(i).getWeizhi();
         String url="http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-17_17-33-30.mp4";
         final RoundProgressBarWidthNumber round=view.findViewById(R.id.download);
@@ -142,5 +161,23 @@ public class tab2_fragment extends Fragment implements AdapterView.OnItemClickLi
      * been saved but before it has been removed from its parent.
      */
 
+    public void showPopMenu(View view,final int pos){
+        PopupMenu popupMenu = new PopupMenu(getActivity(),view);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_item,popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
 
+                adapter.removeItem(pos);
+                return false;
+            }
+        });
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                Toast.makeText(getContext(), "关闭PopupMenu", Toast.LENGTH_SHORT).show();
+            }
+        });
+        popupMenu.show();
+    }
 }
+

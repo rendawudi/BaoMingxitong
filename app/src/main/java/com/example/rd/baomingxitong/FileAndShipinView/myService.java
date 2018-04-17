@@ -21,13 +21,6 @@ import cn.finalteam.okhttpfinal.RequestParams;
 
 
 public class myService extends Service {
-
-    private UploadBinder mBinder=new UploadBinder();
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
     //回调接口，后台服务显示上传进度
     BaseHttpRequestCallback<myHttpResult> mycallback=new BaseHttpRequestCallback<myHttpResult>() {
         @Override
@@ -36,6 +29,7 @@ public class myService extends Service {
             stopForeground(true);
             getNotificationManager().notify(1,getNotification("Upload Success",-1));
             Toast.makeText(getBaseContext(), "上传成功：" + uploadResponse.getMsg(), Toast.LENGTH_SHORT).show();
+            mBinder.getCallback().success();
         }
 
         @Override
@@ -52,18 +46,18 @@ public class myService extends Service {
         }
     };
 
-    class UploadBinder extends Binder {
-        public void startUpload(RequestParams params){
-            HttpUtil.uploadFile(params,mycallback);
-        }
-        public void pauseUpload(){
+    private UploadBinder mBinder=new UploadBinder(mycallback);
 
-        }
 
-        public void cancelUpload(){
 
-        }
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
     }
+
+
+
+
 
     private NotificationManager getNotificationManager(){
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

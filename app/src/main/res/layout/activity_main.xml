@@ -26,7 +26,7 @@
                 android:layout_weight="1"
 
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentScrim="?attr/colorPrimary"
+
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
@@ -116,7 +116,7 @@
             android:onClick="onClickFab"
             android:src="@mipmap/ic_toolbar_add"
             app:backgroundTint="@color/fab_ripple"
-            app:layout_behavior=".behavior.CustomExpandBehavior"
+            app:layout_behavior=".behavior.ScrollAwareFABBehaviorDepend"
             app:layout_anchor="@id/view_pager"
             app:layout_anchorGravity="bottom|right|end" />
     </android.support.design.widget.CoordinatorLayout>
